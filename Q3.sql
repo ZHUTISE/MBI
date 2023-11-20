@@ -1,86 +1,75 @@
 ﻿--В базе данных MS SQL Server есть продукты и категории. Одному продукту может соответствовать много категорий, в одной категории может быть много продуктов.
 
-create table product
-(
-    uid         varchar,
-    description varchar not null
-);
-
-alter table product
-    add constraint product_pk
-        primary key (uid);
+CREATE TABLE product (
+	uid         VARCHAR(5),
+    description VARCHAR(255) NOT NULL,
+                CONSTRAINT product_pk 
+                    PRIMARY KEY (uid)
+	);
 
 
 
-create table category
-(
-    uid         varchar,
-    description varchar not null
-);
-
-alter table category
-    add constraint category_pk
-        primary key (uid);
+CREATE TABLE category (
+	uid         VARCHAR(5),
+    description VARCHAR(255) NOT NULL,
+                CONSTRAINT category_pk 
+                    PRIMARY KEY (uid)
+	);
 
 
 
-create table category_product_map
-(
-    product_uid  varchar,
-    category_uid varchar
-);
+CREATE TABLE category_product_map (
+	product_uid  VARCHAR(5),
+	category_uid VARCHAR(5),
+	             CONSTRAINT category_product_map_pk 
+	                 PRIMARY KEY (product_uid ,category_uid)
+	);
 
-alter table category_product_map
-    add constraint category_product_map_pk
-        primary key (product_uid, category_uid);
+ALTER TABLE category_product_map
+    ADD CONSTRAINT category_product_map_product_uid_fk
+        FOREIGN KEY (product_uid) REFERENCES product;
 
-alter table category_product_map
-    add constraint category_product_map_product_uid_fk
-        foreign key (product_uid) references product;
-
-alter table category_product_map
-    add constraint category_product_map_category_uid_fk
-        foreign key (category_uid) references category;
+ALTER TABLE category_product_map
+    ADD CONSTRAINT category_product_map_category_uid_fk
+        FOREIGN KEY (category_uid) REFERENCES category;
 
 
 
-INSERT INTO product (uid, description) VALUES ('p-aaa'::varchar, 'apple'::varchar);
-INSERT INTO product (uid, description) VALUES ('p-bbb'::varchar, 'banana'::varchar);
-INSERT INTO product (uid, description) VALUES ('p-ccc'::varchar, 'cider'::varchar);
-INSERT INTO product (uid, description) VALUES ('p-ddd'::varchar, 'donut'::varchar);
-INSERT INTO product (uid, description) VALUES ('p-fff'::varchar, 'fridge'::varchar);
-INSERT INTO product (uid, description) VALUES ('p-ggg'::varchar, 'grable'::varchar);
-INSERT INTO product (uid, description) VALUES ('p-qwe'::varchar, 'pencil'::varchar);
-INSERT INTO product (uid, description) VALUES ('p-plk'::varchar, 'pen'::varchar);
-INSERT INTO product (uid, description) VALUES ('p-mbi'::varchar, 'notebook'::varchar);
-INSERT INTO product (uid, description) VALUES ('p-zht'::varchar, 'ruler'::varchar);
-
-INSERT INTO category (uid, description) VALUES ('c-qqq'::varchar, 'drinks'::varchar);
-INSERT INTO category (uid, description) VALUES ('c-www'::varchar, 'food'::varchar);
-INSERT INTO category (uid, description) VALUES ('c-eee'::varchar, 'stationare'::varchar);
-INSERT INTO category (uid, description) VALUES ('c-ewq'::varchar, 'dress'::varchar);
-INSERT INTO category (uid, description) VALUES ('c-ewa'::varchar, 'fruits'::varchar);
-
-INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-aaa'::varchar, 'c-ewa'::varchar);
-INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-bbb'::varchar, 'c-ewa'::varchar);
-INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-aaa'::varchar, 'c-www'::varchar);
-INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-bbb'::varchar, 'c-www'::varchar);
-INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-ccc'::varchar, 'c-qqq'::varchar);
-INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-ddd'::varchar, 'c-www'::varchar);
-INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-qwe'::varchar, 'c-eee'::varchar);
-INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-plk'::varchar, 'c-eee'::varchar);
-INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-mbi'::varchar, 'c-eee'::varchar);
-INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-zht'::varchar, 'c-eee'::varchar);
+INSERT INTO product (uid, description) VALUES ('p-aaa', 'apple');
+INSERT INTO product (uid, description) VALUES ('p-bbb', 'banana');
+INSERT INTO product (uid, description) VALUES ('p-ccc', 'cider');
+INSERT INTO product (uid, description) VALUES ('p-ddd', 'donut');
+INSERT INTO product (uid, description) VALUES ('p-fff', 'fridge');
+INSERT INTO product (uid, description) VALUES ('p-ggg', 'grable');
+INSERT INTO product (uid, description) VALUES ('p-qwe', 'pencil');
+INSERT INTO product (uid, description) VALUES ('p-plk', 'pen');
+INSERT INTO product (uid, description) VALUES ('p-mbi', 'notebook');
+INSERT INTO product (uid, description) VALUES ('p-zht', 'ruler');
+INSERT INTO category (uid, description) VALUES ('c-qqq', 'drinks');
+INSERT INTO category (uid, description) VALUES ('c-www', 'food');
+INSERT INTO category (uid, description) VALUES ('c-eee', 'stationary');
+INSERT INTO category (uid, description) VALUES ('c-ewq', 'dress');
+INSERT INTO category (uid, description) VALUES ('c-ewa', 'fruits');
+INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-aaa', 'c-ewa');
+INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-bbb', 'c-ewa');
+INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-aaa', 'c-www');
+INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-bbb', 'c-www');
+INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-ccc', 'c-qqq');
+INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-ddd', 'c-www');
+INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-qwe', 'c-eee');
+INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-plk', 'c-eee');
+INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-mbi', 'c-eee');
+INSERT INTO category_product_map (product_uid, category_uid) VALUES ('p-zht', 'c-eee');
 
 -- Напишите SQL запрос для выбора всех пар «Имя продукта – Имя категории». Если у продукта нет категорий, то его имя все равно должно выводиться.
 
-select
-    p.description as product_name,
-    c.description as category_name
-from
+SELECT
+    p.description AS product_name,
+    c.description AS category_name
+FROM
     product p
-    left join category_product_map cpm
-        on cpm.product_uid = p.uid
-    left join category c
-        on c.uid = cpm.category_uid
-order by 2;
+    LEFT JOIN category_product_map cpm
+        ON cpm.product_uid = p.uid
+    LEFT JOIN category c
+        ON c.uid = cpm.category_uid
+ORDER BY 2;
