@@ -67,9 +67,9 @@ SELECT
     p.description AS product_name,
     c.description AS category_name
 FROM
-    product p
-    LEFT JOIN category_product_map cpm
+    product AS p
+    LEFT JOIN category_product_map AS cpm
         ON cpm.product_uid = p.uid
-    LEFT JOIN category c
+    LEFT JOIN category AS c
         ON c.uid = cpm.category_uid
 ORDER BY 2;
